@@ -17,12 +17,12 @@ export class ProdutoDetailPage {
   }
 
   ionViewDidLoad() {
-    this.item = {
-      id: '1',
-      nome: 'Mouse',
-      preco: 100.00
-    }
-    this.getImagesIfExists();
+    this.produtoService.findById(this.navParams.get('item_id'))
+      .subscribe(response => {
+        this.item = response;
+        this.getImagesIfExists();
+      },
+      error => {});
   }
 
   getImagesIfExists() {

@@ -9,12 +9,12 @@
 
 <ion-content padding>
   <ion-list>
-    <button ion-item *ngFor='let item of items' (click)='showDetail()'>
+    <button ion-item *ngFor='let item of items' (click)='showDetail(item.id)'>
       <ion-thumbnail item-start>
         <img src='{{item?.imageUrl}}'>
       </ion-thumbnail>
       <h2>{{item.nome}}</h2>
-      <p>{{item.preco | currency}}</p>
+      <p>{{item.preco | currency:'BRL'}}</p>
     </button>
   </ion-list>
 </ion-content>
