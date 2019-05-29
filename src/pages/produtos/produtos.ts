@@ -21,24 +21,37 @@ export class ProdutosPage {
     this.produtoService.findByCategoria(categoria_id)
       .subscribe(response => {
         this.items = response['content'];
-        this.getImagesIfExists();
+        this.getSmallImagesIfExists();
+        this.getLargeImagesIfExists();
       },
       error => {});
   }
 
-  getImagesIfExists() {
+  getSmallImagesIfExists() {
     for(let i=0; i<this.items.length; i++) {
       this.produtoService.getSmallImageFromBucket(this.items[i].id)
         .subscribe(response => {
-          this.items[i].imageUrl = `${API_CONFIG.bucketBaseUrl}/prod${this.items[i].id}-small.jpg`;
+          this.items[i].smallImageUrl = `${API_CONFIG.bucketBaseUrl}/prod${this.items[i].id}-small.jpg`;
         },
         error => {
-          this.items[i].imageUrl = `${API_CONFIG.bucketBaseUrl}/prod.jpg`;
+          this.items[i].smallImageUrl = `${API_CONFIG.bucketBaseUrl}/prod.jpg`;
         });
     }
   }
 
-  showDetail(id: string) {
-    this.navCtrl.push('ProdutoDetailPage', {item_id: id});
+  getLargeImagesIfExists() {
+    for(let i=0; i<this.items.length; i++) {
+      this.produtoService.getLargeImageFromBucket(this.items[i].id)
+        .subscribe(response => {
+          this.items[i].largeImageUrl = `${API_CONFIG.bucketBaseUrl}/prod${this.items[i].id}.jpg`;
+        },
+        error => {
+          this.items[i].largeImageUrl = `${API_CONFIG.bucketBaseUrl}/prod.jpg`;
+        });
+    }
+  }
+
+  showDetail(item: ProdutoDTO) {
+    this.navCtrl.push('ProdutoDetailPage', {produto: item});
   }
 }

@@ -8,10 +8,15 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-fab top right edge>
+    <button navPush='CartPage' ion-fab small>
+      <ion-icon name='cart'></ion-icon>
+    </button>
+  </ion-fab>
   <ion-list>
-    <button ion-item *ngFor='let item of items' (click)='showDetail(item.id)'>
+    <button ion-item *ngFor='let item of items' (click)='showDetail(item)'>
       <ion-thumbnail item-start>
-        <img src='{{item?.imageUrl}}'>
+        <img src='{{item?.smallImageUrl}}'>
       </ion-thumbnail>
       <h2>{{item.nome}}</h2>
       <p>{{item.preco | currency:'BRL'}}</p>

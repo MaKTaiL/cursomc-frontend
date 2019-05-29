@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CartService } from '../../services/cart.service';
 import { CartItem } from '../../models/cart-item';
 import { ProdutoService } from '../../services/domain/produto.service';
-import { API_CONFIG } from '../../config/api.config';
+import { ProdutoDTO } from '../../models/produto.dto';
 
 @IonicPage()
 @Component({
@@ -24,18 +24,25 @@ export class CartPage {
   ionViewDidLoad() {
     let cart = this.cartService.getCart();
     this.items = cart.items;
-    this.getImagesIfExists();
   }
-  
-  getImagesIfExists() {
-    for(let i=0; i<this.items.length; i++) {
-      this.produtoService.getSmallImageFromBucket(this.items[i].produto.id)
-        .subscribe(response => {
-          this.items[i].produto.imageUrl = `${API_CONFIG.bucketBaseUrl}/prod${this.items[i].produto.id}-small.jpg`;
-        },
-        error => {
-          this.items[i].produto.imageUrl = `${API_CONFIG.bucketBaseUrl}/prod.jpg`;
-        });
-    }
+
+  aumentarQuantidade(item: ProdutoDTO) {
+    this.items = this.cartService.addProduto(item).items;
+  }
+
+  diminuirQuantidade(item: ProdutoDTO) {
+    this.items = this.cartService.diminuirQuantidade(item).items;
+  }
+
+  removeProduto(item: ProdutoDTO) {
+    this.items = this.cartService.removeProduto(item).items;
+  }
+
+  getTotal(): number {
+    return this.cartService.calcularTotal();
+  }
+
+  continuarComprando() {
+    this.navCtrl.setRoot('CategoriasPage');
   }
 }

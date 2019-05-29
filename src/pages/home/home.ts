@@ -49,7 +49,6 @@ export class HomePage {
     this.auth.refreshToken()
       .subscribe(response => {
         this.auth.successfulLogin(response.headers.get('Authorization'));
-        this.cart.createOrCleanCart();
         this.navCtrl.setRoot("CategoriasPage");
       },
       error => {});

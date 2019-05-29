@@ -3,11 +3,16 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Profile</ion-title>
+    <ion-title>Perfil</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+  <ion-fab top right edge>
+    <button navPush='CartPage' ion-fab small>
+      <ion-icon name='cart'></ion-icon>
+    </button>
+  </ion-fab>
   <ion-avatar>
     <img class="circle" src="{{cliente?.imageUrl}}">
   </ion-avatar>

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Item } from 'ionic-angular';
+import { IonicPage, NavController, NavParams} from 'ionic-angular';
 import { ProdutoDTO } from '../../models/produto.dto';
 import { ProdutoService } from '../../services/domain/produto.service';
-import { API_CONFIG } from '../../config/api.config';
 import { CartService } from '../../services/cart.service';
 
 @IonicPage()
@@ -22,22 +21,7 @@ export class ProdutoDetailPage {
   }
 
   ionViewDidLoad() {
-    this.produtoService.findById(this.navParams.get('item_id'))
-      .subscribe(response => {
-        this.item = response;
-        this.getImageIfExists();
-      },
-      error => {});
-  }
-
-  getImageIfExists() {
-    this.produtoService.getSmallImageFromBucket(this.item.id)
-      .subscribe(response => {
-        this.item.imageUrl = `${API_CONFIG.bucketBaseUrl}/prod${this.item.id}.jpg`;
-      },
-      error => {
-        this.item.imageUrl = `${API_CONFIG.bucketBaseUrl}/prod.jpg`;
-      });
+    this.item = this.navParams.get('produto');
   }
 
   addProduto() {

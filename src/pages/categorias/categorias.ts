@@ -25,8 +25,21 @@ export class CategoriasPage {
     this.categoriaService.findAll()
       .subscribe(response => {
         this.items = response;
+        this.getImagesIfExists();
       },
       error => {});
+  }
+
+  getImagesIfExists() {
+    for(let i=0; i<this.items.length; i++) {
+      this.categoriaService.getImageFromBucket(this.items[i].id)
+        .subscribe(response => {
+          this.items[i].imageUrl = `${API_CONFIG.bucketBaseUrl}/cat${this.items[i].id}.jpg`;
+        },
+        error => {
+          this.items[i].imageUrl = `${API_CONFIG.bucketBaseUrl}/prod.jpg`;
+        });
+    }
   }
 
   showProdutos(id: string) {

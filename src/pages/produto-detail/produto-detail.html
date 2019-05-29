@@ -8,8 +8,13 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-fab top right edge>
+    <button navPush='CartPage' ion-fab small>
+      <ion-icon name='cart'></ion-icon>
+    </button>
+  </ion-fab>
   <ion-card>
-    <img src={{item?.imageUrl}}>
+    <img src={{item?.largeImageUrl}}>
     <ion-card-content>
       <ion-card-title>
         {{item?.nome}}
