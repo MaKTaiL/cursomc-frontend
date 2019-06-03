@@ -42,7 +42,11 @@ export class CartPage {
     return this.cartService.calcularTotal();
   }
 
-  continuarComprando() {
+  goOn() {
     this.navCtrl.setRoot('CategoriasPage');
+  }
+
+  checkout() {
+    this.navCtrl.push('PickAddressPage');
   }
 }
