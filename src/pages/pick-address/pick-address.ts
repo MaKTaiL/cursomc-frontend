@@ -5,7 +5,6 @@ import { StorageService } from '../../services/storage.service';
 import { ClienteService } from '../../services/domain/cliente.service';
 import { PedidoDTO } from '../../models/pedido.dto';
 import { CartService } from '../../services/cart.service';
-import { map } from 'rxjs/operators';
 
 @IonicPage()
 @Component({
@@ -52,7 +51,7 @@ export class PickAddressPage {
 
   nextPage(endereco: EnderecoDTO) {
     this.pedido.enderecoDeEntrega = {id: endereco.id};
-    console.log(this.pedido);
+    this.navCtrl.push('PaymentPage', {pedido: this.pedido});
   }
 
 }
