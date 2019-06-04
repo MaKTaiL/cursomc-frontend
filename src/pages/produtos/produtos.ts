@@ -11,7 +11,10 @@ import { API_CONFIG } from '../../config/api.config';
 })
 export class ProdutosPage {
 
-  items: ProdutoDTO[];
+  items: ProdutoDTO[] = [];
+  newList: ProdutoDTO[];
+  page: number = 0;
+  checkComplete: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -28,17 +31,22 @@ export class ProdutosPage {
 
   loadData() {
     let categoria_id = this.navParams.get('categoria_id');
-    this.produtoService.findByCategoria(categoria_id)
+    this.produtoService.findByCategoria(categoria_id, this.page, 10)
       .subscribe(response => {
-        this.items = response['content'];
-        this.getSmallImagesIfExists();
-        this.getLargeImagesIfExists();
+        let start = this.items.length;
+        this.items = this.items.concat(response["content"]);
+        let end = this.items.length;
+        this.getSmallImagesIfExists(start, end);
+        this.getLargeImagesIfExists(start, end);
+        if(response["last"] == true) {
+          this.checkComplete = true;
+        }
       },
       error => {});
   }
 
-  getSmallImagesIfExists() {
-    for(let i=0; i<this.items.length; i++) {
+  getSmallImagesIfExists(start: number, end: number) {
+    for(let i=start; i<end; i++) {
       this.produtoService.getSmallImageFromBucket(this.items[i].id)
         .subscribe(response => {
           this.items[i].smallImageUrl = `${API_CONFIG.bucketBaseUrl}/prod${this.items[i].id}-small.jpg`;
@@ -49,8 +57,8 @@ export class ProdutosPage {
     }
   }
 
-  getLargeImagesIfExists() {
-    for(let i=0; i<this.items.length; i++) {
+  getLargeImagesIfExists(start: number, end: number) {
+    for(let i=start; i<end; i++) {
       this.produtoService.getLargeImageFromBucket(this.items[i].id)
         .subscribe(response => {
           this.items[i].largeImageUrl = `${API_CONFIG.bucketBaseUrl}/prod${this.items[i].id}.jpg`;
@@ -74,9 +82,20 @@ export class ProdutosPage {
   }
 
   doRefresh(refresher) {
+    this.page = 0;
+    this.items = [];
+    this.checkComplete = false;
     this.loadData();
     setTimeout(() => {
       refresher.complete();
+    }, 1000);
+  }
+
+  doInfinite(infiniteScroll) {
+    this.page++;
+    this.loadData();
+    setTimeout(() => {
+      infiniteScroll.complete();
     }, 1000);
   }
 }
